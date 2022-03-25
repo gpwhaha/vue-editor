@@ -20,7 +20,7 @@ export default {
   methods: {
     setDesgin() {
       this.$refs.tiny.setDesgin();
-    },
+    }, 
     setReadOnly() {
       this.$refs.tiny.setReadOnly();
     },
