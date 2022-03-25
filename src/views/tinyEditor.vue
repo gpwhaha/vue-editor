@@ -14,13 +14,13 @@ export default {
   components: { TinyEditor, Tiny },
   data() {
     return {
-      value:''
+      value: "测试",
     };
   },
   methods: {
     setDesgin() {
       this.$refs.tiny.setDesgin();
-    }, 
+    },
     setReadOnly() {
       this.$refs.tiny.setReadOnly();
     },
