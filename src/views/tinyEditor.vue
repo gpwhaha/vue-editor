@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-25 09:35:44
- * @LastEditTime: 2022-03-28 10:17:36
- * @LastEditors: your name
+ * @LastEditTime: 2022-03-28 10:29:05
+ * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \V5.0_Webe:\workSpace\vue-editor\src\views\tinyEditor.vue
 -->
@@ -22,7 +22,7 @@ export default {
   components: { TinyEditor, Tiny },
   data() {
     return {
-      value: "测试",
+      value: "测试代码",
     };
   },
   methods: {
