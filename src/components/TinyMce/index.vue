@@ -4,7 +4,14 @@
     class="tinymce-container"
     :style="{ width: containerWidth }"
   >
-    <textarea :id="tinymceId" class="tinymce-textarea" />
+    <!-- <textarea :id="tinymceId" class="tinymce-textarea" /> -->
+    <div :class="tinymceId">
+      Click here to edit the second section of content!
+    </div>
+    <h1>-</h1>
+    <div :class="tinymceId">
+      Click here to edit the second section of content!
+    </div>
     <div class="editor-custom-btn-container"></div>
   </div>
 </template>
@@ -31,16 +38,21 @@ export default {
       default: "",
     },
     toolbar: {
-      type: Array,
+      type: [Array, Boolean],
       required: false,
       default() {
         return [];
       },
     },
     menubar: {
-      type: Array,
+      type: [Array, Boolean],
       required: false,
       default: () => [],
+    },
+    inline: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
     height: {
       type: [Number, String],
@@ -113,11 +125,12 @@ export default {
       window.tinymce.init({
         language: this.language, // 显示语种
         language_url: "tinymce/zh_CN.js",
-        selector: `#${this.tinymceId}`, // 容器的id
+        selector: `.${this.tinymceId}`, // 容器的id
         height: this.height, // 高度
+        inline: this.inline, // 开启内联模式
         // body_class: "panel-body ",
         //  skin: 'oxide-dark',
-        content_style: "body { margin: 2rem 20%; }", //设置文内容区域样式
+        content_style: "body { margin: 0 auto; width: 210mm; height: 297mm; },", //设置文内容区域样式
         object_resizing: false, // 图片和表格是否开启在编辑器内部缩放
         toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar, // 工具栏，参数类型是个数组
         plugins: plugins,
@@ -150,6 +163,7 @@ export default {
         font_formats:
           "微软雅黑='微软雅黑';宋体='宋体';黑体='黑体';仿宋='仿宋';楷体='楷体';隶书='隶书';幼圆='幼圆';Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings",
         save_enablewhendirty: false,
+
         save_onsavecallback: function(editor) {
           _this.$message.success("已保存");
           console.log("保存：", editor.getContent());
@@ -277,14 +291,13 @@ export default {
             editor.notificationManager.open({
               text: "正在转换中...",
               type: "info",
-              closeButton: false,
             });
             next(files);
           } else {
             editor.notificationManager.open({
               text: "目前仅支持docx文件格式，若为doc，请将扩展名改为docx",
               type: "warning",
-              closeButton: false,
+              closeButton: false, //设置为true可以自定关闭提示
             });
           }
           // next(files);
@@ -297,6 +310,7 @@ export default {
         },
       });
     },
+
     setDesgin() {
       const tinymce = window.tinymce.get(this.tinymceId);
       tinymce.setMode("design"); //开启编辑模式

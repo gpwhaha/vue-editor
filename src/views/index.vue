@@ -5,11 +5,11 @@
       &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
       <router-link :to="{ name: 'dbFile' }" exact>数据库文档预览</router-link>
       &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-      <router-link :to="{ path: 'tinyEditor' }" exact
+      <router-link :to="{ name: 'tinyEditor' }" exact
         >tinymceEditor</router-link
       >
       &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-      <router-link :to="{ path: 'wangEditor' }" exact>wangEditor</router-link>
+      <router-link :to="{ name: 'wangEditor' }" exact>wangEditor</router-link>
     </h3>
     <router-view />
   </div>
@@ -24,7 +24,7 @@ export default {
 <style scoped>
 #nav {
   height: auto;
-  padding-top: 2%;
+  padding-top: 0%;
   width: calc(100% - 200px);
   margin-left: 6%;
   text-align: center;

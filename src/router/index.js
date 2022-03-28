@@ -19,7 +19,17 @@ const routes = [
         path: '/dbFile',
         name: 'dbFile',
         component: () => import('../views/dbFile.vue')
-      }
+      },
+      {
+        path: '/tinyEditor',
+        name: 'tinyEditor',
+        component: () => import('../views/tinyEditor.vue')
+      },
+      {
+        path: '/wangEditor',
+        name: 'wangEditor',
+        component: () => import('../views/wangEditor.vue')
+      },
     ]
   },
   {
@@ -37,16 +47,7 @@ const routes = [
     name: 'quillEditor',
     component: () => import('../views/quilEditor.vue')
   },
-  {
-    path: '/tinyEditor',
-    name: 'tinyEditor',
-    component: () => import('../views/tinyEditor.vue')
-  },
-  {
-    path: '/wangEditor',
-    name: 'wangEditor',
-    component: () => import('../views/wangEditor.vue')
-  },
+ 
 ];
 
 const router = new Router({
