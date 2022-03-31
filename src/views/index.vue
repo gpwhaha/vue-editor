@@ -25,8 +25,7 @@ export default {
 #nav {
   height: auto;
   padding-top: 0%;
-  width: calc(100% - 200px);
-  margin-left: 6%;
+
   text-align: center;
 }
 
