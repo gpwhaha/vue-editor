@@ -5,13 +5,11 @@
     :style="{ width: containerWidth }"
   >
     <!-- <textarea :id="tinymceId" class="tinymce-textarea" /> -->
+    <div :class="tinymceId"></div>
+    <!-- <h1>-</h1>
     <div :class="tinymceId">
       Click here to edit the second section of content!
-    </div>
-    <h1>-</h1>
-    <div :class="tinymceId">
-      Click here to edit the second section of content!
-    </div>
+    </div> -->
     <div class="editor-custom-btn-container"></div>
   </div>
 </template>
@@ -57,7 +55,7 @@ export default {
     height: {
       type: [Number, String],
       required: false,
-      default: `calc( 100vh - 50px)`,
+      default: `calc( 100vh - 70px)`,
     },
     width: {
       type: [Number, String],
@@ -127,12 +125,15 @@ export default {
         language_url: "tinymce/zh_CN.js",
         selector: `.${this.tinymceId}`, // 容器的id
         height: this.height, // 高度
-        inline: this.inline, // 开启内联模式
+        // inline: true, // 开启内联模式
+        noneditable_editable_class: "mceEditable",
+        noneditable_noneditable_class: "mceNonEditable",
         // body_class: "panel-body ",
         //  skin: 'oxide-dark',
         content_style: "body { margin: 0 auto; width: 210mm; height: 297mm; },", //设置文内容区域样式
-        object_resizing: false, // 图片和表格是否开启在编辑器内部缩放
+        object_resizing: true, // 图片和表格是否开启在编辑器内部缩放
         toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar, // 工具栏，参数类型是个数组
+        toolbar_mode: "floating",
         plugins: plugins,
         menubar: this.menubar, // 菜单栏的配置，也是数组  false取消显示菜单栏
         branding: false, // 隐藏右下角技术支持
@@ -160,8 +161,15 @@ export default {
         // CONFIG: Font
         placeholder: "请输入内容",
         fontsize_formats: "10px 11px 12px 14px 16px 18px 20px 24px 36pt",
-        font_formats:
-          "微软雅黑='微软雅黑';宋体='宋体';黑体='黑体';仿宋='仿宋';楷体='楷体';隶书='隶书';幼圆='幼圆';Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings",
+        font_formats: `微软雅黑='微软雅黑';宋体='宋体';黑体='黑体';仿宋='仿宋';楷体='楷体';隶书='隶书';幼圆='幼圆';
+          Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;
+          Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;
+          Comic Sans MS=comic sans ms,sans-serif;
+          Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;
+          Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;
+          Terminal=terminal,monaco;Times New Roman=times new roman,times;
+          Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;
+          Webdings=webdings;Wingdings=wingdings`,
         save_enablewhendirty: false,
 
         save_onsavecallback: function(editor) {
@@ -183,6 +191,11 @@ export default {
         setup(editor) {
           editor.on("FullscreenStateChanged", (e) => {
             _this.fullscreen = e.state;
+          });
+          editor.on("click", (e) => {
+            console.log("光标点击_dom", e.target);
+            console.log("光标点击_dataset值", e.target.dataset);
+            console.log("光标点击_事件", e);
           });
           console.log("设置：", editor);
           //定义一个名为 assignment 的toolbar
@@ -228,39 +241,70 @@ export default {
             <input style="background-color: transprent"  maxlength="5"></input>
             `;
           };
+          let radiokBox = function() {
+            return `
+            <div class="radio-group">
+              <label><input type="radio" name="sex" value="男" checked> 男</label>
+              <label><input type="radio" name="sex" value="女"> 女</label>
+            </div>
+            `;
+          };
+          let checkBox = function() {
+            return `
+            <div class="radio-group">
+              <label><input type="checkBox" name="sex" value="男" checked> 男</label>
+              <label><input type="checkBox" name="sex" value="女"> 女</label>
+            </div>
+            `;
+          };
           /**
             自定义插入按钮
           */
           editor.ui.registry.addMenuButton("menuDateButton", {
-            text: "自定义插入时间",
+            text: "参数",
             fetch: function(callback) {
               var items = [
                 {
                   type: "menuitem",
-                  text: "Insert Date",
+                  text: "普通文本",
                   onAction: function(_) {
-                    editor.insertContent(toDateHtml(new Date()));
+                    // editor.insertContent(toDateHtml(new Date()));
+                    _this.$emit("setInput");
+                  },
+                },
+                {
+                  type: "menuitem",
+                  text: "性别单选框",
+                  onAction: function(_) {
+                    editor.insertContent(radiokBox());
+                  },
+                },
+                {
+                  type: "menuitem",
+                  text: "性别复选框",
+                  onAction: function(_) {
+                    editor.insertContent(checkBox());
                   },
                 },
                 {
                   type: "nestedmenuitem",
-                  text: "Other formats",
+                  text: "更多",
                   getSubmenuItems: function() {
                     return [
-                      {
-                        type: "menuitem",
-                        text: "GMT",
-                        onAction: function(_) {
-                          editor.insertContent(toGmtHtml(new Date()));
-                        },
-                      },
-                      {
-                        type: "menuitem",
-                        text: "ISO",
-                        onAction: function(_) {
-                          editor.insertContent(toIsoHtml(new Date()));
-                        },
-                      },
+                      // {
+                      //   type: "menuitem",
+                      //   text: "GMT",
+                      //   onAction: function(_) {
+                      //     editor.insertContent(toGmtHtml(new Date()));
+                      //   },
+                      // },
+                      // {
+                      //   type: "menuitem",
+                      //   text: "ISO",
+                      //   onAction: function(_) {
+                      //     editor.insertContent(toIsoHtml(new Date()));
+                      //   },
+                      // },
                       {
                         type: "menuitem",
                         text: "插入自定义按钮",
@@ -340,6 +384,19 @@ export default {
     getContent() {
       window.tinymce.get(this.tinymceId).getContent();
     },
+    insertContent(value) {
+      if (window.tinymce) {
+        window.tinymce.get(this.tinymceId).insertContent(value);
+      }
+    },
+    getNode() {
+      if (window.tinymce) {
+        let node = window.tinymce
+          .get(this.tinymceId)
+          .activeEditor.selection.getNode();
+        console.log("node", node);
+      }
+    },
     imageSuccessCBK(arr) {
       arr.forEach((v) =>
         window.tinymce
@@ -363,6 +420,27 @@ export default {
   .tox .tox-toolbar__overflow,
   .tox .tox-toolbar__primary {
     justify-content: center;
+  }
+
+  & /deep/ .tox .tox-sidebar-wrap {
+    width: 220mm;
+    margin: 20px auto;
+    box-shadow: 0 2px 10px #acaaaa;
+    /*滚动条样式*/
+    & ::-webkit-scrollbar {
+      width: 4px;
+      /*height: 4px;*/
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.2);
+    }
+    &::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.1);
+    }
   }
 }
 
