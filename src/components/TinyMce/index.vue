@@ -4,11 +4,9 @@
     class="tinymce-container"
     :style="{ width: containerWidth }"
   >
-    <textarea :id="tinymceId" class="tinymce-textarea" />
-    <!-- <div :class="tinymceId">
-      Click here to edit the second section of content!
-    </div>
-    <h1>-</h1>
+    <!-- <textarea :id="tinymceId" class="tinymce-textarea" /> -->
+    <div :class="tinymceId"></div>
+    <!-- <h1>-</h1>
     <div :class="tinymceId">
       Click here to edit the second section of content!
     </div> -->
@@ -125,9 +123,9 @@ export default {
       window.tinymce.init({
         language: this.language, // 显示语种
         language_url: "tinymce/zh_CN.js",
-        selector: `#${this.tinymceId}`, // 容器的id
+        selector: `.${this.tinymceId}`, // 容器的id
         height: this.height, // 高度
-        inline: this.inline, // 开启内联模式
+        // inline: true, // 开启内联模式
         noneditable_editable_class: "mceEditable",
         noneditable_noneditable_class: "mceNonEditable",
         // body_class: "panel-body ",
@@ -135,6 +133,7 @@ export default {
         content_style: "body { margin: 0 auto; width: 210mm; height: 297mm; },", //设置文内容区域样式
         object_resizing: true, // 图片和表格是否开启在编辑器内部缩放
         toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar, // 工具栏，参数类型是个数组
+        toolbar_mode: "floating",
         plugins: plugins,
         menubar: this.menubar, // 菜单栏的配置，也是数组  false取消显示菜单栏
         branding: false, // 隐藏右下角技术支持
@@ -192,6 +191,11 @@ export default {
         setup(editor) {
           editor.on("FullscreenStateChanged", (e) => {
             _this.fullscreen = e.state;
+          });
+          editor.on("click", (e) => {
+            console.log("光标点击_dom", e.target);
+            console.log("光标点击_dataset值", e.target.dataset);
+            console.log("光标点击_事件", e);
           });
           console.log("设置：", editor);
           //定义一个名为 assignment 的toolbar
@@ -385,6 +389,14 @@ export default {
         window.tinymce.get(this.tinymceId).insertContent(value);
       }
     },
+    getNode() {
+      if (window.tinymce) {
+        let node = window.tinymce
+          .get(this.tinymceId)
+          .activeEditor.selection.getNode();
+        console.log("node", node);
+      }
+    },
     imageSuccessCBK(arr) {
       arr.forEach((v) =>
         window.tinymce
@@ -408,6 +420,27 @@ export default {
   .tox .tox-toolbar__overflow,
   .tox .tox-toolbar__primary {
     justify-content: center;
+  }
+
+  & /deep/ .tox .tox-sidebar-wrap {
+    width: 220mm;
+    margin: 20px auto;
+    box-shadow: 0 2px 10px #acaaaa;
+    /*滚动条样式*/
+    & ::-webkit-scrollbar {
+      width: 4px;
+      /*height: 4px;*/
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.2);
+    }
+    &::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.1);
+    }
   }
 }
 

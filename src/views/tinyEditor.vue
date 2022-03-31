@@ -2,21 +2,6 @@
   <div>
     <el-button type="success" @click="setDesgin">编辑模式</el-button>
     <el-button type="info" @click="setReadOnly">只读模式</el-button>
-
-    <!-- <span
-      data-display-type="block"
-      contenteditable="ture"
-      data-qys-version="1.0"
-      data-qys-type="text"
-      data-qys-name="参数1"
-      data-border-type="all"
-      data-max="300"
-      data-shadow-value="111"
-      data-value="1111"
-      class="param-content fr-deletable "
-      style="font-family: SimSun, STSong,BASE;border:1px soild #000;display:inline-block;font-size: 14px;-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align: left;color: #FF0000;min-width: 148px;min-height: 24px;"
-      >1111</span
-    > -->
     <tiny ref="tiny" :value="value" @setInput="setInput"></tiny>
     <right-bar
       @insertContent="insertContent"
@@ -35,22 +20,8 @@ export default {
   components: { TinyEditor, Tiny, RightBar, Input },
   data() {
     return {
-      value: `<!--
- * @Date: 2022-03-29 14:32:32
- * @LastEditors: gepanwen
- * @LastEditTime: 2022-03-29 16:16:35
- * @FilePath: \V5.0_Webe:\workSpace\vue-editor\src\views\test.html
--->
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <div class='mceNonEditable'>
+      value: `
+    <div class='mceNonEditable  mydiv'>
       让我们来测试一下这个插入输入框转word什么效果，<input
         style="font-size: 14px; font-family: '宋体'; border-bottom: 1px solid #000; border-top: none; border-left: none; border-right: none;"
         type="text"
@@ -93,8 +64,7 @@ export default {
         测试下边框额鹅鹅鹅</span>少时诵诗书所所
       &nbsp;
     </div>
-  </body>
-</html>
+
 `,
       isshow: false,
     };
